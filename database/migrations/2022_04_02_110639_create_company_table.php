@@ -18,6 +18,7 @@ class CreateCompanyTable extends Migration
             $table->string('company_name');
             $table->integer('supervisor_id');
             $table->integer('secretary_id');
+            $table->integer('indusry_id');
         });
     }
 
