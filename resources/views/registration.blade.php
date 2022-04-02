@@ -3,22 +3,28 @@
 @section('title', 'Регистрация компании')
 
 @section('content')
-<form class="row g-5 needs-validation" novalidate>
+<form method="POST" action="/reg" class="row g-5 needs-validation" novalidate>
+    @csrf
     <div class="col-md-6">
-      <label for="validationCustom01" class="form-label">ФИО</label>
-      <input type="text" class="form-control" id="validationCustom01" value="Иван" required>
+      <label class="form-label">ФИО</label>
+      <input type="text" class="form-control" name="user_name" placeholder="Введите имя" required>
     </div>
     <div class="col-md-5">
-      <label for="validationCustom02" class="form-label">Почта</label>
-      <input type="email" class="form-control" id="validationCustom02" value="example@ex.com" required>
+      <label class="form-label">Почта</label>
+      <input type="email" class="form-control" name="email" placeholder="Введите почту" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Название компании</label>
+      <input type="text" class="form-control" name="company_name" placeholder="Введите название" required>
     </div>
     <div class="col-md-5">
-      <label for="validationCustom02" class="form-label">Название компании</label>
-      <input type="text" class="form-control" id="validationCustom02" placeholder="Введите название" required>
-    </div>
-    <div class="col-md-4">
-      <label for="validationCustom02" class="form-label">Почта</label>
-      <input type="text" class="form-control" id="validationCustom02" value="Петров" required>
+      <label class="form-label">Область деятельности</label>
+      <select class="form-control" name="industry_type">
+        <option disabled selected>Выберите тип компании</option>
+        @foreach($industryList as $industry)
+          <option value="{{ $industry->industry_id }}">{{ $industry->industry_name }}</option>
+        @endforeach
+      </select>
     </div>
     <div class="col-12">
       <div class="form-check">

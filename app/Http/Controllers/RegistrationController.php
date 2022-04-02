@@ -9,7 +9,13 @@ class RegistrationController extends Controller
 {
     public function index()
     {
-        $industryList = Industry::get();
-        return view();
+        $industryList = Industry::all();
+        return view('registration', compact('industryList'));
+    }
+
+    public function store(Request $request)
+    {
+        dd($request->all());
+        
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/reg', function () {
-    return view('registration');
+Route::controller(RegistrationController::class)->group(function () {
+    Route::get('/reg', 'index');
+    Route::post('/reg', 'store');
 });
