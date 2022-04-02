@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Industry;
 use Illuminate\Http\Request;
 
 class RegistrationController extends Controller
 {
     public function index()
     {
-        return view()
+        $industryList = Industry::get();
+        return view();
     }
 }
