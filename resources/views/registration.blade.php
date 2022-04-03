@@ -3,15 +3,23 @@
 @section('title', 'Регистрация компании')
 
 @section('content')
-<form method="POST" action="/reg" class="row g-5 needs-validation" novalidate>
+<form method="POST" action="{{ route('reg') }}" class="row g-5 needs-validation" novalidate>
     @csrf
     <div class="col-md-6">
       <label class="form-label">ФИО</label>
-      <input type="text" class="form-control" name="user_name" placeholder="Введите имя" required>
+      <input type="text" class="form-control" name="name" placeholder="Введите имя" required>
     </div>
     <div class="col-md-5">
       <label class="form-label">Почта</label>
       <input type="email" class="form-control" name="email" placeholder="Введите почту" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Придумайте пароль</label>
+      <input type="password" class="form-control" name="password" placeholder="Введите пароль" required>
+    </div>
+    <div class="col-md-5">
+      <label class="form-label">Подтвердите пароль</label>
+      <input type="password" class="form-control" name="password_confirm" placeholder="Подтвердите" required>
     </div>
     <div class="col-md-6">
       <label class="form-label">Название компании</label>
@@ -37,8 +45,13 @@
         </div>
       </div>
     </div>
+    @error('any')
+      <div class="alert alert-danger mt-3">{{ $message }}</div>
+    @enderror
+    <div class="col-12">
+      <a href="{{ route('login') }}" class="nav-link">Есть аккаунт / компания уже подключена к системе? Авторизуйтесь!</a>
     <div class="col-12">
       <button class="btn btn-primary" type="submit">Отправить форму</button>
     </div>
-  </form>  
+  </form>
 @endsection

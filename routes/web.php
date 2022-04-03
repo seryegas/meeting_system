@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RegistrationController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,11 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/', 'welcome')->middleware('auth')->name('home');
 
 Route::controller(RegistrationController::class)->group(function () {
-    Route::get('/reg', 'index');
+    Route::get('/reg', 'index')->name('reg');
     Route::post('/reg', 'store');
+    Route::get('/login', 'show')->name('login');
 });
