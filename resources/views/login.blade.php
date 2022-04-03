@@ -13,7 +13,10 @@
             <label class="form-label">Пароль</label>
             <input type="password" class="form-control" name="password" placeholder="Введите пароль" required>
         </div>
-        <a href="{{ route('login') }}" class="nav-link">Впервые на сайте? Пройдите регистрацию</a>
+        @error('logError')
+            <div class="alert alert-danger mt-3">{{ $message }}</div>
+        @enderror
+        <a href="{{ route('reg') }}" class="nav-link">Впервые на сайте? Пройдите регистрацию</a>
         <div>
             <button class="btn btn-primary" type="submit">Отправить форму</button>
         </div>

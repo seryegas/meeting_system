@@ -7,6 +7,7 @@ use App\Models\Industry;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class RegistrationController extends Controller
 {
@@ -43,7 +44,7 @@ class RegistrationController extends Controller
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
-            'password' => $validatedData['password'],
+            'password' => Hash::make($validatedData['password']),
             'user_role' => 3,
             'user_profession' => 'Руководитель компании',
             'company_id' => 0,
@@ -53,7 +54,7 @@ class RegistrationController extends Controller
             Auth::login($user);
             $company = Company::create([
                 'company_name' => $validatedData['company_name'],
-                'indusry_id' => $validatedData['industry_type'],
+                'industry_id' => $validatedData['industry_type'],
                 'supervisor_id' => $user->id,
                 'secretary_id' => 0
             ]);
@@ -64,14 +65,5 @@ class RegistrationController extends Controller
         return redirect(route('reg'))->withErrors([
             'any' => 'Произошла ошибка при регистрации пользователя'
         ]);
-    }
-    
-    public function show()
-    {
-        if (Auth::check())
-        {
-            return redirect(route('/'));
-        }
-        return view('login');
     }
 }
