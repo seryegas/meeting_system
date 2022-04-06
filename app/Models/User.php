@@ -45,4 +45,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function SetSessionData() 
+    {
+        session([
+            'user_id' => $this->id,
+            'user_name' => $this->name,
+            'user_email' => $this->email,
+            'user_role' => $this->user_role,
+            'user_avatar' => $this->user_avatar,
+            'user_profession' => $this->user_profession,
+            'company_id' => $this->company_id
+        ]);
+    }
 }

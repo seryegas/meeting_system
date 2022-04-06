@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -31,7 +32,9 @@ class LoginController extends Controller
 
         if (Auth::attempt($data))
         {
-            return redirect()->intended('/');
+            $user = User::get()->where('email', $data['email'])->first();
+            $user->SetSessionData();
+            return redirect(route('profile'));
         }
         
         return redirect(route('login'))->withErrors([

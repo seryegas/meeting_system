@@ -35,3 +35,11 @@ Route::get('/logout', function() {
         return redirect(route('home'));
     }
 });
+
+Route::get('/profile', function() {
+    if (Auth::check())
+    {
+        return view('profile');
+    }
+    return redirect(route('login'));
+})->name('profile');

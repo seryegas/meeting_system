@@ -13,7 +13,10 @@ class RegistrationController extends Controller
 {
     public function index()
     {
-        
+        if (Auth::check())
+        {
+            return redirect(route('home'));
+        }
         $industryList = Industry::all();
         return view('registration', compact('industryList'));
     }
@@ -59,6 +62,7 @@ class RegistrationController extends Controller
                 'secretary_id' => 0
             ]);
             $user->update(['company_id' => $company->id]);
+            $user->SetSessionData();
             return redirect(route('home'));
         }
 
