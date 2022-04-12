@@ -32,14 +32,54 @@ Route::get('/logout', function() {
     if (Auth::check())
     {
         Auth::logout();
-        return redirect(route('home'));
+        return redirect(route('login'));
     }
 });
 
 Route::get('/profile', function() {
     if (Auth::check())
     {
-        return view('profile');
+        return view('profile.profile');
     }
     return redirect(route('login'));
 })->name('profile');
+
+Route::get('/work_with_employees', function() {
+    if (Auth::check())
+    {
+        return view('profile.work_with_employees');
+    }
+    return redirect(route('login'));
+})->name('wwe');
+
+Route::get('/work_with_company', function() {
+    if (Auth::check())
+    {
+        return view('profile.work_with_company');
+    }
+    return redirect(route('login'));
+})->name('wwc');
+
+Route::get('/meetings', function() {
+    if (Auth::check())
+    {
+        return view('profile.meetings');
+    }
+    return redirect(route('login'));
+})->name('meetings');
+
+Route::get('/tasks', function() {
+    if (Auth::check())
+    {
+        return view('profile.tasks');
+    }
+    return redirect(route('login'));
+})->name('tasks');
+
+Route::get('/archive', function() {
+    if (Auth::check())
+    {
+        return view('profile.archive');
+    }
+    return redirect(route('login'));
+})->name('archive');

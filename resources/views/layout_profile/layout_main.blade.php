@@ -40,6 +40,7 @@
 
         .my-container {
             margin-left: 250px;
+            margin-right: 270px;
         }
     </style>
 </head>

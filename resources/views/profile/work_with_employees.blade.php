@@ -1,0 +1,13 @@
+@extends('layout_profile.layout_main')
+
+@section('title', 'Работа с сотрудниками: ' . session('user_name'))
+
+@section('header')
+    @extends('layout_profile.header')
+@endsection
+
+@section('content')
+    <p class="text-dark">fdgggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
+        gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
+        gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg</p>
+@endsection
