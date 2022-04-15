@@ -10,11 +10,12 @@
     <div class="mb-3" style="max-width: 800px;">
         <div class="row g-0">
             <div class="col-md-4">
-                <img src="{{ asset('/images/profile.jpg') }}" class="img-fluid rounded-start">
+                <img src="{{$user->user_avatar == 1 ? asset('/storage/images/' . $user->id . '.jpg') : asset('/images/profile.jpg') }}" class="img-fluid rounded-start">
             </div>
             <div class="col-md-8 ">
-                <form class="ms-3" method="POST" action="{{ route('store_employee') }}">
+                <form class="ms-3" method="POST" action="{{ route('update_user') }}" enctype="multipart/form-data" >
                     @csrf
+                    @method('put')
                     <div class="form-group">
                         <label>Имя сотрудника</label>
                         <input type="text" class="form-control" name="name" value=
@@ -31,8 +32,12 @@
                         "{{ isset($user) ? $user->user_profession : 'Профессия'}}">
                     </div>
                     <div class="form-group mt-3">
+                        <input type="hidden" class="form-control" name="id" value=
+                        "{{ isset($user) ? $user->id : 0}}">
+                    </div>
+                    <div class="form-group mt-3">
                         <label for="formFileLg" class="form-label">Загрузить новое фото профиля</label>
-                        <input class="form-control form-control-lg" id="formFileLg" type="file">
+                        <input class="form-control form-control-lg" name="image" type="file">
                       </div>
                     @error('any')
                         <div class="alert alert-danger mt-3">{{ $message }}</div>

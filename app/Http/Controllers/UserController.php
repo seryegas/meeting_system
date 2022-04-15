@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -22,13 +23,37 @@ class UserController extends Controller
     public function show($user_id)
     {
         $user = User::find($user_id);
-        return view('profile.profile', compact('user'));
+        $path = Storage::path('public/images/');
+        return view('profile.profile', compact('user', 'path'));
     }
 
     public function edit($user_id)
     {
         $user = User::find($user_id);
-        return view('profile.profile_edit', compact('user'));
+        $path = Storage::path('public/images/');
+        return view('profile.profile_edit', compact('user', 'path'));
+    }
+
+    public function update(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|max:150',
+            'email' => 'required|min:6|max:50',
+            'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000',
+        ]);
+        $user = User::find($request->get('id'));
+        if ($request->hasFile('image'))
+        {
+            $request->file('image')->storeAs('public/images/', $request->get('id') . '.jpg');
+            $user->update([
+                'user_avatar' => 1,
+            ]);
+        }
+        $user->update([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+        ]);
+        return redirect(route('profile_edit', $user->id))->with('success', 'Данные изменены');
     }
 
     public function ResetPassword($user_id)

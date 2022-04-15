@@ -71,6 +71,7 @@ Route::post('/create_employee', [UserController::class, 'store'])->middleware('a
 Route::get('/work_with_employees', [UserController::class, 'index'])->middleware('auth')->name('wwe');
 Route::get('/profile/{id}', [UserController::class, 'show'])->middleware('auth')->name('profile');
 Route::get('/edit/{id}', [UserController::class, 'edit'])->middleware('auth')->name('profile_edit');
+Route::put('/edit', [UserController::class, 'update'])->middleware('auth')->name('update_user');
 Route::get('/newpassword/{id}', [UserController::class, 'ResetPassword'])->middleware('auth')->name('new_password');
 
 

@@ -37,7 +37,7 @@
         </li>
 
         <li class="nav-item w-100" style="margin-top: 270px">
-            <a href="{{ route('logout') }}" class="nav-link text-light btn btn-danger">
+            <a href="{{ route('logout') }}" class="nav-link text-light btn btn-danger ms-3 me-3">
                 Выйти
             </a>
         </li>
