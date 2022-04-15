@@ -34,7 +34,7 @@ class LoginController extends Controller
         {
             $user = User::get()->where('email', $data['email'])->first();
             $user->SetSessionData();
-            return redirect(route('profile'));
+            return redirect(route('profile', $user->id));
         }
         
         return redirect(route('login'))->withErrors([

@@ -6,7 +6,7 @@
     </a>
     <ul class="navbar-nav d-flex flex-column mt-5 w-100">
         <li class="nav-item w-100">
-            <a href="{{ route('profile') }}" class="nav-link text-light pl-4">
+            <a href="{{ route('profile', session('user_id')) }}" class="nav-link text-light pl-4">
                 Профиль
             </a>
         </li>
@@ -27,12 +27,18 @@
         </li>
         <li class="nav-item w-100">
             <a href="{{ route('tasks') }}" class="nav-link text-light pl-4">
-                Поручения
+                Мои задания
             </a>
         </li>
         <li class="nav-item w-100">
             <a href="{{ route('archive') }}" class="nav-link text-light pl-4">
-                Архив
+                Выполнение заданий
+            </a>
+        </li>
+
+        <li class="nav-item w-100" style="margin-top: 270px">
+            <a href="{{ route('logout') }}" class="nav-link text-light btn btn-danger">
+                Выйти
             </a>
         </li>
     </ul>

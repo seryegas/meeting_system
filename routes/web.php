@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -34,31 +36,7 @@ Route::get('/logout', function() {
         Auth::logout();
         return redirect(route('login'));
     }
-});
-
-Route::get('/profile', function() {
-    if (Auth::check())
-    {
-        return view('profile.profile');
-    }
-    return redirect(route('login'));
-})->name('profile');
-
-Route::get('/work_with_employees', function() {
-    if (Auth::check())
-    {
-        return view('profile.work_with_employees');
-    }
-    return redirect(route('login'));
-})->name('wwe');
-
-Route::get('/work_with_company', function() {
-    if (Auth::check())
-    {
-        return view('profile.work_with_company');
-    }
-    return redirect(route('login'));
-})->name('wwc');
+})->name('logout');
 
 Route::get('/meetings', function() {
     if (Auth::check())
@@ -83,3 +61,16 @@ Route::get('/archive', function() {
     }
     return redirect(route('login'));
 })->name('archive');
+
+Route::get('/work_with_company', [CompanyController::class, 'GetInfoAboutCompany'])->name('wwc');
+Route::get('/make_secretary', [CompanyController::class, 'GetSecretary'])->name('make_secretary');
+Route::post('/make_secretary', [CompanyController::class, 'StoreNewSecretary'])->name('store_secretary');
+
+Route::get('/create_employee', [UserController::class, 'create'])->middleware('auth')->name('create_employee');
+Route::post('/create_employee', [UserController::class, 'store'])->middleware('auth')->name('store_employee');
+Route::get('/work_with_employees', [UserController::class, 'index'])->middleware('auth')->name('wwe');
+Route::get('/profile/{id}', [UserController::class, 'show'])->middleware('auth')->name('profile');
+Route::get('/edit/{id}', [UserController::class, 'edit'])->middleware('auth')->name('profile_edit');
+Route::get('/newpassword/{id}', [UserController::class, 'ResetPassword'])->middleware('auth')->name('new_password');
+
+

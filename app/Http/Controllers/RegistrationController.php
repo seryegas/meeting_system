@@ -63,7 +63,7 @@ class RegistrationController extends Controller
             ]);
             $user->update(['company_id' => $company->id]);
             $user->SetSessionData();
-            return redirect(route('home'));
+            return redirect(route('profile', $user->id));
         }
 
         return redirect(route('reg'))->withErrors([
