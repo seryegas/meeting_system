@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -38,14 +39,6 @@ Route::get('/logout', function() {
     }
 })->name('logout');
 
-Route::get('/meetings', function() {
-    if (Auth::check())
-    {
-        return view('profile.meetings');
-    }
-    return redirect(route('login'));
-})->name('meetings');
-
 Route::get('/tasks', function() {
     if (Auth::check())
     {
@@ -74,4 +67,7 @@ Route::get('/edit/{id}', [UserController::class, 'edit'])->middleware('auth')->n
 Route::put('/edit', [UserController::class, 'update'])->middleware('auth')->name('update_user');
 Route::get('/newpassword/{id}', [UserController::class, 'ResetPassword'])->middleware('auth')->name('new_password');
 
-
+Route::get('/meetings', [MeetingController::class, 'index'])->middleware('auth')->name('meetings');
+Route::get('/create_meeting', [MeetingController::class, 'create'])->middleware('auth')->name('create_meeting');
+Route::post('/create_meeting', [MeetingController::class, 'store'])->middleware('auth')->name('store_meeting');
+Route::get('/meeting/{id}', [MeetingController::class, 'show'])->middleware('auth')->name('show_meeting');

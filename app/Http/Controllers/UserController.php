@@ -39,6 +39,7 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|max:150',
             'email' => 'required|min:6|max:50',
+            'profession' => 'required|min:6|max:50',
             'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000',
         ]);
         $user = User::find($request->get('id'));
@@ -52,6 +53,7 @@ class UserController extends Controller
         $user->update([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
+            'user_profession' => $validatedData['profession']
         ]);
         return redirect(route('profile_edit', $user->id))->with('success', 'Данные изменены');
     }
