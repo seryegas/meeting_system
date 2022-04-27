@@ -3,8 +3,10 @@
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\UserController;
+use App\Models\Question;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -71,3 +73,8 @@ Route::get('/meetings', [MeetingController::class, 'index'])->middleware('auth')
 Route::get('/create_meeting', [MeetingController::class, 'create'])->middleware('auth')->name('create_meeting');
 Route::post('/create_meeting', [MeetingController::class, 'store'])->middleware('auth')->name('store_meeting');
 Route::get('/meeting/{id}', [MeetingController::class, 'show'])->middleware('auth')->name('show_meeting');
+Route::get('/change_meeting_status/{id}/{type}',[MeetingController::class, 'change_status'])->middleware('auth')->name('change_status');
+
+Route::post('/question',[QuestionController::class, 'store'])->middleware('auth')->name('store_question');
+Route::delete('/question/{id}', [QuestionController::class, 'destroy'])->middleware('auth')->name('delete_question');
+

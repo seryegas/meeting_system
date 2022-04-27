@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Meeting;
+use App\Models\Question;
 use Illuminate\Http\Request;
 
 class MeetingController extends Controller
@@ -45,6 +46,15 @@ class MeetingController extends Controller
     public function show($meeting_id)
     {
         $meeting = Meeting::where('meeting_id',$meeting_id)->first();
-        return view('meeting.show_meeting', compact('meeting'));
+        $questions = Question::where('meeting_id',$meeting_id)->get();
+        return view('meeting.show_meeting', compact('meeting', 'questions'));
+    }
+
+    public function change_status($meeting_id, $type)
+    {
+        $meeting = Meeting::where('meeting_id', $meeting_id)->first();
+        $meeting->is_online = $type;
+        $meeting->save();
+        return redirect(route('show_meeting', $meeting_id));
     }
 }
