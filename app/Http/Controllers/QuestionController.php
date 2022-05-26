@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Meeting;
 use App\Models\Question;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -37,11 +39,14 @@ class QuestionController extends Controller
     {
         $data = $request->validate([
             'question_name' => 'required|min:3|max:150',
-            'meeting_id' => 'required'
+            'meeting_id' => 'required',
+            'user_id' => 'required|numeric'
         ]);
         $question = Question::create([
             'meeting_id' => $data['meeting_id'],
             'question_name' => $data['question_name'],
+            'speaker_id' => $data['user_id'],
+            'description' => ''
         ]);
         if (!$question)
         {
@@ -59,9 +64,12 @@ class QuestionController extends Controller
      * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function show(Question $question)
+    public function show($question_id)
     {
-        //
+        $question = Question::find($question_id);
+        $meeting = Meeting::where('meeting_id',$question->meeting_id)->first();
+        $users = User::where('company_id', session('company_id'))->get();
+        return view('question.show_question', compact('meeting', 'question', 'users'));
     }
 
     /**
@@ -82,9 +90,17 @@ class QuestionController extends Controller
      * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Question $question)
+    public function update(Request $request)
     {
-        //
+        $data = $request->validate([
+            'description' => 'min:3|max:1000',
+            'question_id' => 'numeric'
+        ]);
+        $question = Question::find($data['question_id']);
+        $question->update([
+            'description' => $data['description'],
+        ]);
+        return redirect(route('show_question', $question->question_id))->with('success', 'Данные изменены');
     }
 
     /**

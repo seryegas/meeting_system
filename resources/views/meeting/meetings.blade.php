@@ -9,6 +9,11 @@
 @section('content')
     <a type="button" class="btn btn-primary" href="{{ route('create_meeting') }}">Создать собрание</a>
     <a type="button" class="btn btn-secondary" href="{{ route('make_secretary') }}">Дать поручение</a>
+    @if (session('success'))
+        <div class="alert alert-success mt-2">
+            {{ session('success') }}
+        </div>
+    @endif
     @if ($meetings->isEmpty())
         <p class="mt-3">Создайте ваше первое собрание</p>
     @else

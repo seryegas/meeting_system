@@ -74,7 +74,10 @@ Route::get('/create_meeting', [MeetingController::class, 'create'])->middleware(
 Route::post('/create_meeting', [MeetingController::class, 'store'])->middleware('auth')->name('store_meeting');
 Route::get('/meeting/{id}', [MeetingController::class, 'show'])->middleware('auth')->name('show_meeting');
 Route::get('/change_meeting_status/{id}/{type}',[MeetingController::class, 'change_status'])->middleware('auth')->name('change_status');
+Route::delete('/meeting/{id}', [MeetingController::class, 'destroy'])->middleware('auth')->name('delete_meeting');
 
+Route::get('/question/{id}',[QuestionController::class, 'show'])->middleware('auth')->name('show_question');
 Route::post('/question',[QuestionController::class, 'store'])->middleware('auth')->name('store_question');
+Route::put('/edit', [QuestionController::class, 'update'])->middleware('auth')->name('update_question');
 Route::delete('/question/{id}', [QuestionController::class, 'destroy'])->middleware('auth')->name('delete_question');
 

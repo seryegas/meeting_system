@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Meeting;
 use App\Models\Question;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MeetingController extends Controller
 {
     public function index()
     {
-        $meetings = Meeting::where('company_id', session('company_id'))->get();
+        $meetings = Meeting::where('company_id', session('company_id'))->get()->sortByDesc('is_online');;
         return view('meeting.meetings',compact('meetings'));
     }
 
@@ -40,14 +41,15 @@ class MeetingController extends Controller
             ]);
         }
         $message = 'Собрание создано';
-        return redirect(route('create_meeting'))->with('success', $message);
+        return redirect(route('meetings'))->with('success', $message);
     }
 
     public function show($meeting_id)
     {
         $meeting = Meeting::where('meeting_id',$meeting_id)->first();
-        $questions = Question::where('meeting_id',$meeting_id)->get();
-        return view('meeting.show_meeting', compact('meeting', 'questions'));
+        $questions = Question::with('users')->where('meeting_id', $meeting->meeting_id)->get();
+        $users = User::where('company_id', session('company_id'))->get();
+        return view('meeting.show_meeting', compact('meeting', 'questions', 'users'));
     }
 
     public function change_status($meeting_id, $type)
@@ -56,5 +58,12 @@ class MeetingController extends Controller
         $meeting->is_online = $type;
         $meeting->save();
         return redirect(route('show_meeting', $meeting_id));
+    }
+
+    public function destroy($meeting_id)
+    {
+        $deletedQuestions = Question::where('meeting_id', $meeting_id)->delete();
+        $meeting = Meeting::find($meeting_id)->delete();
+        return redirect(route('meetings', $meeting_id))->with('success', "Собрание удалено!");
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Question extends Model
 {
@@ -16,6 +17,18 @@ class Question extends Model
     protected $table = 'questions';
     protected $fillable = [
         'meeting_id',
-        'question_name'
+        'question_name',
+        'speaker_id',
+        'description'
     ];
+
+    public function meeting()
+    {
+        return $this->belongsTo(Meeting::class);
+    }
+
+    public function users()
+    {
+        return $this->hasOne(User::class, 'id', 'speaker_id');
+    }
 }

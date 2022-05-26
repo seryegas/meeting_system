@@ -4,6 +4,13 @@
     <div class="form-group">
         <input type="text" class="form-control mt-3" name="question_name" placeholder="Вопрос">
     </div>
+    <select class="form-control mt-3" name="user_id">
+        <option disabled selected>Выберите сотрудника</option>
+        @foreach ($users as $user)
+            <option value="{{ $user->id }}">{{ $user->name }}
+            </option>
+        @endforeach
+    </select>
     <div class="form-group">
         <input type="hidden" class="form-control" value="{{ $meeting->meeting_id }}" name="meeting_id" >
     </div>
