@@ -26,7 +26,7 @@
             </a>
         </li>
         <li class="nav-item w-100">
-            <a href="{{ route('meetings') }}" class="nav-link text-light pl-4">
+            <a href="{{ route('show_notes') }}" class="nav-link text-light pl-4">
                 Мои уведомления
             </a>
         </li>
@@ -41,7 +41,7 @@
             </a>
         </li>
 
-        <li class="nav-item w-100" style="margin-top: 225px">
+        <li class="nav-item w-100" style="margin-top: 220px">
             <a href="{{ route('logout') }}" class="nav-link text-light btn btn-danger ms-3 me-3">
                 Выйти
             </a>

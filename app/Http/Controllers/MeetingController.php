@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Meeting;
+use App\Models\Notification;
 use App\Models\Question;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Events\NotificationSent;
 
 class MeetingController extends Controller
 {
@@ -62,8 +64,19 @@ class MeetingController extends Controller
 
     public function destroy($meeting_id)
     {
-        $deletedQuestions = Question::where('meeting_id', $meeting_id)->delete();
-        $meeting = Meeting::find($meeting_id)->delete();
+        Question::where('meeting_id', $meeting_id)->delete();
+        Meeting::find($meeting_id)->delete();
         return redirect(route('meetings', $meeting_id))->with('success', "Собрание удалено!");
+    }
+
+    public static function send_notes($company_id, $note_type)
+    {
+        $users = User::where('company_id', $company_id)->get();
+        foreach($users as $user)
+        {
+            Notification::create([
+                
+            ]);
+        }
     }
 }

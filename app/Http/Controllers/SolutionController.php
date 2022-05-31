@@ -35,9 +35,23 @@ class SolutionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'solution_desc' => 'required|min:3|max:150',
+            'question_id' => 'required'
+        ]);
+        $solution = Solution::create([
+            'solution_desc' => $data['solution_desc'],
+            'question_id' => $data['question_id']
+        ]);
+        if (!$solution)
+        {
+            return redirect(route('show_question', $data['question_id']))->withErrors([
+                'any' => 'Произошла ошибка при добавлении решения'
+            ]); 
+        }
+        $message = 'Вопрос добавлен';
+        return redirect(route('show_question', $data['question_id']))->with('success', $message); 
     }
-
     /**
      * Display the specified resource.
      *
@@ -78,8 +92,11 @@ class SolutionController extends Controller
      * @param  \App\Models\Solution  $solution
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Solution $solution)
+    public function destroy($solution_id)
     {
-        //
+        $solution = Solution::where('solution_id', $solution_id)->first();
+        $question_id = $solution->question_id;
+        $solution->delete();
+        return redirect(route('show_question', $question_id))->with('success', "Решение удалено!");
     }
 }

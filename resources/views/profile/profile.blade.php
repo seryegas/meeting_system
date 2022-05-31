@@ -18,7 +18,9 @@
                     <p class="card-text">{{ $user->email }}</p>
                     <p class="card-text"> Профессия: {{ $user->user_profession }}</p>
                 </div>
-                <a class="btn btn-primary ms-3" href="{{ route('profile_edit', $user->id) }}" role="button">Редактировать</a>
+                @if(session('user_role') > 1)
+                    <a class="btn btn-primary ms-3" href="{{ route('profile_edit', $user->id) }}" role="button">Редактировать</a>
+                @endif
             </div>  
         </div>
     </div>

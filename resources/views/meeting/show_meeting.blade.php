@@ -7,6 +7,7 @@
 @endsection
 
 @section('content')
+    <a class="btn btn-info ms-3 mb-2" href="{{ route('meetings') }}" role="button">Назад к списку собраний</a>
     <div class="mb-3" style="max-width: 800px;">
         <div class="row g-0">
             <div class="col-md-8">
@@ -15,31 +16,56 @@
                     <p class="card-text">{{ $meeting->description }}</p>
                     <p class="card-text">Дата: {{ $meeting->meeting_time }}</p>
                     @if ($meeting->is_online == 1)
-                        <p class="card-text">Стутус: предстоит</p>
-                        <div><a type="button" class="btn btn-success mt-3" href="{{ route('change_status', 
-                        [$meeting->meeting_id, 2]) }}">Начать собрание</a></div>
+                        <p class="card-text">Статус: описывается</p>
+                        @if(session('user_role') > 1)
+                            <div><a type="button" class="btn btn-success mt-3" href="{{ route('change_status', 
+                            [$meeting->meeting_id, 3]) }}">Объявить собрание (повестка дня готова)</a></div>
+                            <div>
+                                <form  method="POST" action="{{ route('delete_meeting', $meeting->meeting_id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger mt-2">Отменить собрание</button>
+                                </form>
+                            </div>
+                        @endif
+                    @elseif ($meeting->is_online == 3)
+                        <p class="card-text">Статус: предстоит</p>
+                        @if(session('user_role') > 1)
+                            <div><a type="button" class="btn btn-success mt-3" href="{{ route('change_status', 
+                            [$meeting->meeting_id, 2]) }}">Начать собрание</a></div>
+                            <div>
+                                <form  method="POST" action="{{ route('delete_meeting', $meeting->meeting_id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger mt-2">Отменить собрание</button>
+                                </form>
+                            </div>
+                        @endif
+                    @elseif($meeting->is_online == 2)
+                        <p class="card-text">Статус: идёт сейчас</p>
+                        @if(session('user_role') > 1)
+                            <a type="button" class="btn btn-warning mt-1" href="{{ route('change_status', 
+                            [$meeting->meeting_id, 0]) }}">Закончить собрание</a>
+                        @endif
+                    @elseif($meeting->is_online == 0)
+                    <p class="card-text">Статус: окончено</p>
+                    @if(session('user_role') > 1)
                         <div>
                             <form  method="POST" action="{{ route('delete_meeting', $meeting->meeting_id) }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger mt-2">Отменить собрание</button>
+                                <button type="submit" class="btn btn-danger">Удалить собрание</button>
                             </form>
                         </div>
-                    @elseif($meeting->is_online == 2)
-                        <p class="card-text">Стутус: идёт сейчас</p>
-                        <a type="button" class="btn btn-warning mt-1" href="{{ route('change_status', 
-                        [$meeting->meeting_id, 0]) }}">Закончить собрание</a>
-                    @elseif($meeting->is_online == 0)
-                    <p class="card-text">Стутус: окончено</p>
-                    <div>
-                        <form  method="POST" action="{{ route('delete_meeting', $meeting->meeting_id) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger mt-1">Удалить собрание</button>
-                        </form>
+                        <div class="mt-2">
+                            <a type="button" class="btn btn-secondary" href="{{ route('make_secretary') }}">Дать поручение</a>
+                        </div>
+                    @endif
+                    <div class="mt-2">
+                        <a class="btn btn-info" href="{{ route('get_protocol', 
+                            $meeting->meeting_id) }}" role="button">Скачать протокол</a>
                     </div>
                     @endif
-                    <a type="button" class="btn btn-secondary mt-2" href="{{ route('make_secretary') }}">Дать поручение</a>
                 </div>
             </div>  
         </div>
@@ -51,7 +77,9 @@
             <thead>
                 <tr>
                     <th scope="col">Название</th>
-                    <th scope="col">Функции</th>
+                    @if(session('user_role') > 1)
+                        <th scope="col">Функции</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -63,13 +91,15 @@
                                 Докладчик: {{$question->users->name}}
                             </div>
                         </td>
-                        <td>
-                            <form method="POST" action="{{ route('delete_question', $question->question_id) }}">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger mt-1">Удалить вопрос</button>
-                            </form>
-                        </td>
+                        @if(session('user_role') > 1)
+                            <td>
+                                <form method="POST" action="{{ route('delete_question', $question->question_id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger mt-1">Удалить вопрос</button>
+                                </form>
+                            </td>
+                        @endif
                     </tr>
                 @endforeach
 

@@ -14,7 +14,8 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        //
+        $notes = Notification::where('note_recipient_id', session('user_id'))->get();
+        return view('profile.notifications',compact('notes'));
     }
 
     /**

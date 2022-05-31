@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Meeting;
 use App\Models\Question;
+use App\Models\Solution;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -67,9 +68,10 @@ class QuestionController extends Controller
     public function show($question_id)
     {
         $question = Question::find($question_id);
+        $solutions = Solution::where('question_id', $question_id)->get();
         $meeting = Meeting::where('meeting_id',$question->meeting_id)->first();
         $users = User::where('company_id', session('company_id'))->get();
-        return view('question.show_question', compact('meeting', 'question', 'users'));
+        return view('question.show_question', compact('meeting', 'question', 'users', 'solutions'));
     }
 
     /**
@@ -113,6 +115,7 @@ class QuestionController extends Controller
     {
         $question = Question::where('question_id', $question_id)->first();
         $meeting_id = $question->meeting_id;
+        Solution::where('question_id', $question_id)->delete();
         $question->delete();
         return redirect(route('show_meeting', $meeting_id))->with('success', "Вопрос удален!");
     }

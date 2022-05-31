@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title')</title>
     <!-- Bootstrap CSS -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <style type="text/css">
@@ -41,6 +42,21 @@
         .my-container {
             margin-left: 250px;
             margin-right: 270px;
+        }
+
+        .btn {
+            margin: 5px;
+        }
+
+        .btn-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            text-align: center;
+            padding-left: 0;
+            padding-right: 0;
+            font-size: 12px;
+            white-space: normal;
         }
     </style>
 </head>

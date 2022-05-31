@@ -31,4 +31,9 @@ class Question extends Model
     {
         return $this->hasOne(User::class, 'id', 'speaker_id');
     }
+
+    public function solutions()
+    {
+        return $this->hasMany(Solution::class, 'question_id', 'question_id');
+    }
 }
