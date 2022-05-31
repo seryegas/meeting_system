@@ -18,5 +18,6 @@ class Notification extends Model
         'note_text',
         'note_status',
         'note_type',
+        'note_help_col',
     ];
 }

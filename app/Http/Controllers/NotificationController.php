@@ -14,7 +14,7 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        $notes = Notification::where('note_recipient_id', session('user_id'))->get();
+        $notes = Notification::where('note_recipient_id', session('user_id'))->orderBy('note_id', 'DESC')->get()->sortByDesc('note_status');
         return view('profile.notifications',compact('notes'));
     }
 
@@ -79,8 +79,23 @@ class NotificationController extends Controller
      * @param  \App\Models\Notification  $notification
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Notification $notification)
+    public function destroy($notification_id)
     {
-        //
+        Notification::find($notification_id)->delete();
+        return redirect(route('show_notes'))->with('success', "Уведомление удалено!");
+    }
+
+    public function destroy_all()
+    {
+        Notification::where('note_recipient_id', session('user_id'))->delete();
+        return redirect(route('show_notes'))->with('success', "Список уведомлений очищен!");
+    }
+
+    public function change_status($note_id)
+    {
+        $meeting = Notification::find($note_id);
+        $meeting->note_status = 0;
+        $meeting->save();
+        return redirect(route('show_notes'));
     }
 }

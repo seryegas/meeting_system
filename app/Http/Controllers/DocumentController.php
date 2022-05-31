@@ -46,7 +46,8 @@ class DocumentController extends Controller
         header("Content-Type: application/octet-stream");
         header("Accept-Ranges: bytes");
         header("Content-Length: ".filesize($downdloadFile));
-        header("Content-Disposition: attachment; filename=" . $meeting_name . ".docx");  
+        header('Content-Disposition: attachment; filename="' . $meeting_name . ".docx" . '"');  
+        header('Content-type: application/pdf', true);
 
         readfile($downdloadFile);
     }

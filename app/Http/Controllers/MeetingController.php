@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Meeting;
 use App\Models\Notification;
 use App\Models\Question;
@@ -13,7 +14,7 @@ class MeetingController extends Controller
 {
     public function index()
     {
-        $meetings = Meeting::where('company_id', session('company_id'))->get()->sortByDesc('is_online');;
+        $meetings = Meeting::where('company_id', session('company_id'))->get()->sortByDesc('is_online');
         return view('meeting.meetings',compact('meetings'));
     }
 
@@ -59,6 +60,11 @@ class MeetingController extends Controller
         $meeting = Meeting::where('meeting_id', $meeting_id)->first();
         $meeting->is_online = $type;
         $meeting->save();
+        if ($type == 3 || $type == 0)
+        {
+            $type = ($type == 3) ? 0 : 1;
+            self::send_notes($meeting_id, $type, $meeting->meeting_name);
+        }
         return redirect(route('show_meeting', $meeting_id));
     }
 
@@ -69,13 +75,27 @@ class MeetingController extends Controller
         return redirect(route('meetings', $meeting_id))->with('success', "Собрание удалено!");
     }
 
-    public static function send_notes($company_id, $note_type)
+    public static function send_notes($meeting_id, $note_type, $info)
     {
-        $users = User::where('company_id', $company_id)->get();
+        $meeting = Meeting::find($meeting_id);
+        $users = User::where('company_id', $meeting->company_id)->get();
         foreach($users as $user)
         {
+            $text = '';
+            if ($note_type == 0)
+            {
+                $text = 'Объявлено новое собрание:' . $info . '. Всю информацию можно получить из повестки дня';
+            }
+            elseif ($note_type == 1)
+            {
+                $text = 'Собрание: ' . $info . ' завершено. Всю информацию можно получить из протокола собрания';
+            }
             Notification::create([
-                
+                'note_recipient_id' => $user->id,
+                'note_text' => $text,
+                'note_status' => 1,
+                'note_type' => $note_type,
+                'note_help_col' => $meeting_id,
             ]);
         }
     }

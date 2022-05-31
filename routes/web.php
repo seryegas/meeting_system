@@ -94,5 +94,9 @@ Route::post('/solution',[SolutionController::class, 'store'])->middleware('auth'
 Route::delete('/solution/{id}', [SolutionController::class, 'destroy'])->middleware('auth', 'admin')->name('delete_solution');
 
 Route::get('/protocol/{id}',[DocumentController::class, 'create_protocol'])->middleware('auth')->name('get_protocol');
+Route::get('/botd/{id}',[DocumentController::class, 'create_business_of_the_day'])->middleware('auth')->name('get_botd');
 
 Route::get('/notifications', [NotificationController::class, 'index'])->middleware('auth')->name('show_notes');
+Route::post('/change_note_status/{id}', [NotificationController::class, 'change_status'])->middleware('auth')->name('change_note_status');
+Route::delete('/note_delete/{id}', [NotificationController::class, 'destroy'])->middleware('auth')->name('delete_note');
+Route::delete('/clear_notes_list', [NotificationController::class, 'destroy_all'])->middleware('auth')->name('delete_all_notes');
