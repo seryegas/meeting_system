@@ -8,6 +8,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SolutionController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminAccess;
 use App\Models\Notification;
@@ -44,13 +45,7 @@ Route::get('/logout', function() {
     }
 })->name('logout');
 
-Route::get('/tasks', function() {
-    if (Auth::check())
-    {
-        return view('profile.tasks');
-    }
-    return redirect(route('login'));
-})->name('tasks');
+
 
 Route::get('/archive', function() {
     if (Auth::check())
@@ -100,3 +95,10 @@ Route::get('/notifications', [NotificationController::class, 'index'])->middlewa
 Route::post('/change_note_status/{id}', [NotificationController::class, 'change_status'])->middleware('auth')->name('change_note_status');
 Route::delete('/note_delete/{id}', [NotificationController::class, 'destroy'])->middleware('auth')->name('delete_note');
 Route::delete('/clear_notes_list', [NotificationController::class, 'destroy_all'])->middleware('auth')->name('delete_all_notes');
+
+Route::get('/tasks', [TaskController::class, 'index'])->middleware('auth')->name('tasks');
+Route::post('/change_task_status/{id}/{type}', [TaskController::class, 'change_status'])->middleware('auth')->name('accept_task');
+Route::get('/create_task', [TaskController::class, 'create'])->middleware('auth', 'admin')->name('create_task');
+Route::post('/create_task', [TaskController::class, 'store'])->middleware('auth', 'admin')->name('store_task');
+Route::get('/get_task_help_file/{id}', [TaskController::class, 'download_file'])->middleware('auth')->name('get_task_help_file');
+

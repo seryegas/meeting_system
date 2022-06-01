@@ -35,12 +35,13 @@
                 Мои задания
             </a>
         </li>
-        <li class="nav-item w-100">
-            <a href="{{ route('archive') }}" class="nav-link text-light pl-4">
-                Выполнение заданий
-            </a>
-        </li>
-
+        @if(session('user_role') > 1)    
+            <li class="nav-item w-100">
+                <a href="{{ route('archive') }}" class="nav-link text-light pl-4">
+                    Выполнение заданий
+                </a>
+            </li>
+        @endif
         <li class="nav-item w-100" style="margin-top: 220px">
             <a href="{{ route('logout') }}" class="nav-link text-light btn btn-danger ms-3 me-3">
                 Выйти

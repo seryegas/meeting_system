@@ -58,6 +58,10 @@
             font-size: 12px;
             white-space: normal;
         }
+
+        .line {
+            border-bottom: 3px solid rgb(0, 0, 0);
+        }
     </style>
 </head>
 

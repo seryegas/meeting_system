@@ -56,7 +56,7 @@
                         <td>Новое собрание</td>
                     @elseif($note->note_type == 1)
                         <td>Собрание завершено</td>
-                    @elseif($note->note_type == 0)
+                    @elseif($note->note_type == 2)
                         <td>У вас новое поручение!</td>
                     @endif
                     <td style="word-wrap: break-word;
@@ -65,8 +65,8 @@
                         <td><a href="{{ route('get_botd', $note->note_help_col) }}">Скачать повестку дня</a></td>
                     @elseif($note->note_type == 1)
                         <td><a href="{{ route('get_protocol', $note->note_help_col) }}">Скачать протокол</a></td>
-                    @elseif($note->note_type == 0)
-                        <td><a href="">Перейти к заданиям</a></td>
+                    @elseif($note->note_type == 2)
+                        <td><a href="{{ route('tasks') }}">Перейти к заданиям</a></td>
                     @endif
                     <td class="float-right">
                         <div class="container">

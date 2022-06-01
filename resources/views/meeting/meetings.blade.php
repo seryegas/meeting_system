@@ -9,7 +9,7 @@
 @section('content')
     @if(session('user_role') > 1)
         <a type="button" class="btn btn-primary" href="{{ route('create_meeting') }}">Создать собрание</a>
-        <a type="button" class="btn btn-secondary" href="{{ route('make_secretary') }}">Дать поручение</a>
+        <a type="button" class="btn btn-secondary" href="{{ route('create_task') }}">Дать поручение</a>
     @endif
     @if (session('success'))
         <div class="alert alert-success mt-2">

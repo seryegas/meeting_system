@@ -7,89 +7,143 @@
 @endsection
 
 @section('content')
-    <div class="row">
-        <div class="col-2">
-            <a type="button" class="btn btn-primary" href="{{ route('create_employee') }}">К заданиям</a>
-        </div>
-        <div class="col-sm-3">
-            <a type="button" class="btn btn-primary" href="{{ route('meetings') }}">К собраниям</a>
-        </div>
-        <div class="col-sm-4">
-            <form  method="POST" action="{{ route('delete_all_notes') }}">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger">Очистить уведомления</button>
-            </form>
-        </div>
-        
-
-    </div>
     @if (session('success'))
-    <div class="alert alert-success mt-2">
-        {{ session('success') }}
-    </div>
+        <div class="alert alert-success mt-2">
+            {{ session('success') }}
+        </div>
     @endif
-    @if ($notes->isEmpty())
-    <div class="mt-2">
-        Список уведомлений пуст
+    @if ($tasks_new->isEmpty())
+    <div class="mt-2 ms-3">
+        <h4>У вас нет новых задач</h4>
+        <div class="line"></div>
     </div>
     @else
-    <table class="table mt-3">
-        <thead>
-        <tr>
-            <th scope="col">Тип</th>
-            <th scope="col">Сообщение</th>
-            <th scope="col">Ссылка</th>
-            @if(session('user_role') > 1)
-                <th class="col-md-4" scope="col">Функции</th>
-            @endif
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($notes as $note)
-            @if ($note->note_status == 1)
-                <tr class="mt-3 list-group-item-primary">
-            @elseif($note->note_status == 0)
-                <tr class="mt-3 list-group-item-secondary">
-            @endif
-                @if($note->note_type == 0)
-                    <td>Новое собрание</td>
-                @elseif($note->note_type == 1)
-                    <td>Собрание завершено</td>
-                @elseif($note->note_type == 0)
-                    <td>У вас новое поручение!</td>
-                @endif
-                <td style="word-wrap: break-word;
-                    max-width: 200px;">{{ $note->note_text }}</td>
-                @if($note->note_type == 0)
-                    <td><a href="{{ route('get_botd', $note->note_help_col) }}">Скачать повестку дня</a></td>
-                @elseif($note->note_type == 1)
-                    <td><a href="{{ route('get_protocol', $note->note_help_col) }}">Скачать протокол</a></td>
-                @elseif($note->note_type == 0)
-                    <td><a href="">Перейти к заданиям</a></td>
-                @endif
-                <td class="float-right">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                <form  method="POST" action="{{ route('change_note_status', $note->note_id) }}">
-                                    @csrf
-                                    <button type="submit" class="btn btn-info">Прочитано</button>
-                                </form>
-                            </div>
-                            <div class="col">
-                                <form  method="POST" action="{{ route('delete_note', $note->note_id) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Удалить</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
-    @endif 
+        <div class="container-fluid"><h3>Новые задачи</h3>
+            <table id="productSizes" class="table">
+                <thead>
+                    <tr class="d-flex">
+                        <th class="col-9">Задание</th>
+                        <th class="col-3">Доп. информация</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($tasks_new as $task)
+                        <tr class="d-flex table-primary">
+                            <td class="col-9">{{ $task->task_text }}</td>
+                            @if($task->has_file == 0)
+                                <td class="col-3">
+                                    <form  method="POST" action="{{ route('accept_task', ['id' => $task->task_id, 'type' => 1]) }}">
+                                        @csrf
+                                        <button type="submit" class="btn btn-info">Принять</button>
+                                    </form>
+                                </td>
+                            @else
+                                <td class="col-3">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col">
+                                                <form  method="POST" action="{{ route('accept_task', ['id' => $task->task_id, 'type' => 1]) }}">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-info">Принять</button>
+                                                </form>
+                                            </div>
+                                            <div class="col">
+                                                <a type="button" class="btn btn-primary" href="{{ route('get_task_help_file', $task->task_id) }}">Скачать</a>
+                                            </div>
+                                        </div>
+                                    </div>                                 
+                                </td>
+                            @endif
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+    @if ($tasks_accepted->isEmpty())
+    <div class="mt-2 ms-3">
+        <h4>У вас нет принятых задач</h4>
+        <div class="line"></div>
+    </div>
+    @else
+        <div class="container-fluid"><h3>Ваши принятые задачи</h3>
+            <table id="productSizes" class="table">
+                <thead>
+                    <tr class="d-flex">
+                        <th class="col-7">Задание</th>
+                        <th class="col-5">Доп. информация</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($tasks_accepted as $task)
+                        <tr class="d-flex table-primary">
+                            <td class="col-7">{{ $task->task_text }}</td>
+                            @if($task->has_file == 0)
+                                <td class="col-5">
+                                    <form  method="POST" action="{{ route('accept_task', ['id' => $task->task_id, 'type' => 2]) }}">
+                                        @csrf
+                                        <button type="submit" class="btn btn-info">Передать на проверку</button>
+                                    </form>
+                                </td>
+                            @else
+                                <td class="col-5">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col">
+                                                <form  method="POST" action="{{ route('accept_task', ['id' => $task->task_id, 'type' => 2]) }}">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-info">Передать на проверку</button>
+                                                </form>
+                                            </div>
+                                            <div class="col">
+                                                <a type="button" class="btn btn-primary" href="{{ route('get_task_help_file', $task->task_id) }}">Скачать</a>
+                                            </div>
+                                        </div>
+                                    </div>                                 
+                                </td>
+                            @endif
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+    @if ($tasks_on_check->isEmpty())
+    <div class="mt-2 ms-3">
+        <h4>У вас нет задач на проверке</h4>
+        <div class="line"></div>
+    </div>
+    @else
+        <div class="container-fluid"><h3>Ваши задачи на проверке</h3>
+            <table id="productSizes" class="table">
+                <thead>
+                    <tr class="d-flex">
+                        <th class="col-7">Задание</th>
+                        <th class="col-5">Доп. информация</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($tasks_on_check as $task)
+                        <tr class="d-flex table-primary">
+                            <td class="col-7">{{ $task->task_text }}</td>
+                            @if($task->has_file == 0)
+                                <td class="col-5">
+                                    Нет доп. информации
+                                </td>
+                            @else
+                                <td class="col-5">
+                                    <div class="container">
+                                            <div class="col">
+                                                <a type="button" class="btn btn-primary" href="{{ route('get_task_help_file', $task->task_id) }}">Скачать</a>
+                                            </div>
+                                        </div>
+                                    </div>                                 
+                                </td>
+                            @endif
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
 @endsection

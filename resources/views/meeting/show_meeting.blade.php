@@ -58,7 +58,7 @@
                             </form>
                         </div>
                         <div class="mt-2">
-                            <a type="button" class="btn btn-secondary" href="{{ route('make_secretary') }}">Дать поручение</a>
+                            <a type="button" class="btn btn-secondary" href="{{ route('create_task') }}">Дать поручение</a>
                         </div>
                     @endif
                     <div class="mt-2">
