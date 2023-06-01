@@ -101,4 +101,5 @@ Route::post('/change_task_status/{id}/{type}', [TaskController::class, 'change_s
 Route::get('/create_task', [TaskController::class, 'create'])->middleware('auth', 'admin')->name('create_task');
 Route::post('/create_task', [TaskController::class, 'store'])->middleware('auth', 'admin')->name('store_task');
 Route::get('/get_task_help_file/{id}', [TaskController::class, 'download_file'])->middleware('auth')->name('get_task_help_file');
-
+Route::get('/tasks_on_check',[TaskController::class, 'index_check'])->middleware('auth', 'admin')->name('show_tasks_on_check');
+Route::delete('/delete_task/{id}',[TaskController::class, 'destroy'])->middleware('auth', 'admin')->name('close_task');

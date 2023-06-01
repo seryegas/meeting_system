@@ -9,7 +9,7 @@
 @section('content')
     <div class="row">
             <div class="col-2">
-                <a type="button" class="btn btn-primary" href="{{ route('create_employee') }}">К заданиям</a>
+                <a type="button" class="btn btn-primary" href="{{ route('tasks') }}">К заданиям</a>
             </div>
             <div class="col-sm-3">
                 <a type="button" class="btn btn-primary" href="{{ route('meetings') }}">К собраниям</a>
@@ -71,12 +71,14 @@
                     <td class="float-right">
                         <div class="container">
                             <div class="row">
-                                <div class="col">
-                                    <form  method="POST" action="{{ route('change_note_status', $note->note_id) }}">
-                                        @csrf
-                                        <button type="submit" class="btn btn-info">Прочитано</button>
-                                    </form>
-                                </div>
+                                @if ($note->note_status == 1)
+                                    <div class="col">
+                                        <form  method="POST" action="{{ route('change_note_status', $note->note_id) }}">
+                                            @csrf
+                                            <button type="submit" class="btn btn-info">Прочитано</button>
+                                        </form>
+                                    </div>
+                                @endif
                                 <div class="col">
                                     <form  method="POST" action="{{ route('delete_note', $note->note_id) }}">
                                         @csrf

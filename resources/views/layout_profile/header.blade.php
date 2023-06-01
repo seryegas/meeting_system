@@ -37,7 +37,7 @@
         </li>
         @if(session('user_role') > 1)    
             <li class="nav-item w-100">
-                <a href="{{ route('archive') }}" class="nav-link text-light pl-4">
+                <a href="{{ route('show_tasks_on_check') }}" class="nav-link text-light pl-4">
                     Выполнение заданий
                 </a>
             </li>

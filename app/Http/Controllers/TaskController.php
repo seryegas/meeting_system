@@ -24,6 +24,16 @@ class TaskController extends Controller
         return view('profile.tasks', compact('tasks_new', 'tasks_accepted', 'tasks_on_check'));
     }
 
+    public function index_check()
+    {
+        $tasks_on_check = Task::select(['*'])
+            ->whereIn('task_recipient_id', User::select(['id'])
+                ->where('company_id', session('company_id'))
+            )->where('task_status', 2)->get();
+
+        return view('profile.checking_tasks', compact('tasks_on_check'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -117,14 +127,21 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Task $task)
+    public function destroy($task_id)
     {
-        //
+        Task::find($task_id)->delete();
+        return redirect(route('show_tasks_on_check'))->with('success', "Завершена!");
     }
 
     public function change_status($task_id, $type)
     {
         $task = Task::find($task_id);
+        if ($type == 3)
+        {
+            $task->task_status = 1;
+            $task->save();
+            return redirect(route('show_tasks_on_check'))->with('success', "Задача не принята!");
+        }
         $task->task_status = $type;
         $task->save();
         return redirect(route('tasks'))->with('success', "Задача принята!");

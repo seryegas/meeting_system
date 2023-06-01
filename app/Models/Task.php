@@ -19,4 +19,9 @@ class Task extends Model
         'task_status',
         'has_file',
     ];
+
+    public function users()
+    {
+        return $this->hasOne(User::class, 'id', 'task_recipient_id');
+    }
 }
